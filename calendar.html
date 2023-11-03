@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calendar Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #8594e4, #e4c585);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .calendar {
+            width: 80%;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            opacity: 
+        }
+        .month {
+            background-color: #4d367b;
+            color: #fff;
+            padding: 10px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .month select, .year select {
+            background-color: #4d367b;
+            color: #fff;
+            border: none;
+            padding: 5px;
+            border-radius: 10px;
+        }
+        
+        .table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    width: 100%;
+    border-radius: 10px; /* Adăugat border-radius la tabel */
+}
+
+.table th, .table td {
+    border: 1px solid #4d367b;
+    padding: 15px;
+    text-align: center;
+    background-color: #fff;
+    transition: background-color 0.3s;
+}
+
+.table th {
+    background-color: #4d367b;
+    color: #fff;
+}
+
+.table td:hover {
+    background-color: #a0aae5;
+    cursor: pointer;
+}
+    </style>
+</head>
+<body>
+    <div class="calendar">
+        <h1>Calendar Online</h1>
+        <div class="month">
+            <label for="month">Alege luna și anul:</label>
+            <select id="month">
+                <option value="1">Ianuarie</option>
+                <option value="2">Februarie</option>
+                <option value="3">Martie</option>
+                <option value="4">Aprilie</option>
+                <option value="5">Mai</option>
+                <option value="6">Iunie</option>
+                <option value="7">Iulie</option>
+                <option value="8">August</option>
+                <option value="9">Septembrie</option>
+                <option value="10">Octombrie</option>
+                <option value="11">Noiembrie</option>
+                <option value="12">Decembrie</option>
+            </select>
+            <select id="year">
+                <!-- Poți adăuga aici opțiuni pentru anii pe care dorești să îi incluzi -->
+            </select>
+        </div>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Luni</th>
+                    <th>Marți</th>
+                    <th>Miercuri</th>
+                    <th>Joi</th>
+                    <th>Vineri</th>
+                    <th>Sâmbătă</th>
+                    <th>Duminică</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aici vei adăuga zilele calendarului -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function generateYearOptions() {
+            const yearSelect = document.getElementById("year");
+            const currentYear = new Date().getFullYear();
+            for (let i = currentYear - 23; i <= currentYear + 30; i++) {
+                const option = document.createElement("option");
+                option.value = i;
+                option.textContent = i;
+                yearSelect.appendChild(option);
+            }
+        }
+
+        generateYearOptions();
+
+        function generateCalendar(year, month) {
+            const calendarTable = document.querySelector(".table tbody");
+            calendarTable.innerHTML = "";
+
+            const date = new Date(year, month - 1, 0);
+            const lastDay = new Date(year, month, 0).getDate();
+
+            let dayOfWeek = date.getDay();
+
+            let row = document.createElement("tr");
+
+            for (let i = 0; i < dayOfWeek; i++) {
+                const cell = document.createElement("td");
+                cell.textContent = "";
+                row.appendChild(cell);
+            }
+
+            for (let day = 1; day <= lastDay; day++) {
+                const cell = document.createElement("td");
+                cell.textContent = day;
+                row.appendChild(cell);
+                dayOfWeek++;
+
+                if (dayOfWeek === 7) {
+                    calendarTable.appendChild(row);
+                    row = document.createElement("tr");
+                    dayOfWeek = 0;
+                }
+            }
+
+            if (dayOfWeek > 0) {
+                for (let i = dayOfWeek; i < 7; i++) {
+                    const cell = document.createElement("td");
+                    cell.textContent = "";
+                    row.appendChild(cell);
+                }
+                calendarTable.appendChild(row);
+            }
+        }
+
+        document.getElementById("month").addEventListener("change", function () {
+            const selectedMonth = parseInt(this.value);
+            const selectedYear = parseInt(document.getElementById("year").value);
+            generateCalendar(selectedYear, selectedMonth);
+        });
+
+        document.getElementById("year").addEventListener("change", function () {
+            const selectedYear = parseInt(this.value);
+            const selectedMonth = parseInt(document.getElementById("month").value);
+            generateCalendar(selectedYear, selectedMonth);
+        });
+
+        const currentMonth = new Date().getMonth() + 1;
+        const currentYear = new Date().getFullYear();
+        document.getElementById("month").value = currentMonth;
+        document.getElementById("year").value = currentYear;
+        generateCalendar(currentYear, currentMonth);
+    </script>
+
+
+
+</body>
+</html>
